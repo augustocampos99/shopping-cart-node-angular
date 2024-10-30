@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 30/10/2024 às 15:37
+-- Tempo de geração: 30/10/2024 às 20:56
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.1.25
 
@@ -58,9 +58,22 @@ CREATE TABLE `orders` (
   `id` int(10) NOT NULL,
   `guid` varchar(50) NOT NULL,
   `customer_id` int(10) NOT NULL,
-  `total_price` decimal(6,2) NOT NULL,
-  `status` int(1) NOT NULL
+  `total_price` decimal(10,2) NOT NULL,
+  `status` int(1) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `orders`
+--
+
+INSERT INTO `orders` (`id`, `guid`, `customer_id`, `total_price`, `status`, `created_at`, `updated_at`) VALUES
+(1, '7d2f5fd2-c9ae-478a-a887-d095f6aebdf0', 1, 5000.00, 1, '2024-10-30 18:58:00', '2024-10-30 18:58:00'),
+(3, '0f0b8c15-7bec-4532-b144-a63b4e50da22', 3, 9999.99, 3, '2024-10-30 18:59:06', '2024-10-30 19:02:08'),
+(5, '8c4afd00-ef94-4c9e-8237-94db16e7089c', 3, 9999.99, 2, '2024-10-30 19:04:30', '2024-10-30 19:04:30'),
+(6, 'fb973dca-f46e-4c3b-b04d-3bac36bf66e2', 3, 9999.99, 2, '2024-10-30 19:05:16', '2024-10-30 19:05:16'),
+(7, '9ef5e60c-0c98-4cd5-b834-653c7764a31d', 3, 1000000.00, 3, '2024-10-30 19:05:26', '2024-10-30 19:07:01');
 
 -- --------------------------------------------------------
 
@@ -73,8 +86,19 @@ CREATE TABLE `orders_products` (
   `guid` varchar(50) NOT NULL,
   `order_id` int(10) NOT NULL,
   `product_id` int(10) NOT NULL,
-  `quantity` int(10) NOT NULL
+  `quantity` int(10) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `orders_products`
+--
+
+INSERT INTO `orders_products` (`id`, `guid`, `order_id`, `product_id`, `quantity`, `price`, `created_at`, `updated_at`) VALUES
+(2, 'd1458968-871f-4d6d-8134-d8ced1293e3f', 1, 4, 2, 2000.00, '2024-10-30 19:48:19', '2024-10-30 19:48:19'),
+(3, '7322f43d-ccc9-4f79-a70c-dc74a30788ad', 1, 5, 10, 2000.00, '2024-10-30 19:48:31', '2024-10-30 19:48:31');
 
 -- --------------------------------------------------------
 
@@ -87,17 +111,19 @@ CREATE TABLE `products` (
   `guid` varchar(50) NOT NULL,
   `title` varchar(200) NOT NULL,
   `description` text NOT NULL,
-  `price` decimal(6,2) NOT NULL
+  `price` decimal(6,2) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `products`
 --
 
-INSERT INTO `products` (`id`, `guid`, `title`, `description`, `price`) VALUES
-(1, 'b39c3050-81a0-48eb-805f-c2ca48ab2edd', 'Nintendo Switch Oled', 'Nintendo Switch product description', 249.99),
-(2, 'f9d64535-8bd6-4344-af08-82dc1192b9a0', 'Nintendo Switch Oled', 'Nintendo Switch product description', 2499.99),
-(3, '24ab8426-51f7-43f5-8e9e-075394bb3472', 'XBox series S', 'Sbox series S product description', 2499.99);
+INSERT INTO `products` (`id`, `guid`, `title`, `description`, `price`, `created_at`, `updated_at`) VALUES
+(4, 'f8a10e9c-7fa2-4160-9531-c5f9f8e250dd', 'Nintendo Switch Oled', 'Nintendo Switch Oled Description', 2289.99, '2024-10-30 15:01:22', '2024-10-30 15:01:22'),
+(5, '0d4476fb-88e1-4ad1-8a5b-e6dfca205053', 'XBox series S', 'XBox series S descrição', 2499.99, '2024-10-30 18:23:56', '2024-10-30 18:23:56'),
+(7, 'd07bd9b1-421d-4074-8b58-c4a4c40abe09', 'XBox series S Updated', 'XBox series S descrição Updated', 2799.99, '2024-10-30 18:26:28', '2024-10-30 18:27:02');
 
 --
 -- Índices para tabelas despejadas
@@ -148,19 +174,19 @@ ALTER TABLE `customers`
 -- AUTO_INCREMENT de tabela `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `orders_products`
 --
 ALTER TABLE `orders_products`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Restrições para tabelas despejadas
