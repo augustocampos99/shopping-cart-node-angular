@@ -5,23 +5,80 @@ import crypto from "crypto";
 export default class CustomerService {
 
   public async getAll(){
-    const result = await CustomerModel.findAll();
-    return result;    
+    try {
+      const result = await CustomerModel.findAll();
+      return result;            
+    } 
+    catch (error: any) {
+      throw new Error(`Processing error: ${ error }`);
+    }
   }
 
-  public async getByGuid(guid: string){    
+  public async getByGuid(guid: string) {    
+    try {
+      const result = await CustomerModel.findOne({
+        where: {
+          guid: guid
+        }
+      });
+      return result;    
+    } 
+    catch (error: any) {
+      throw new Error(`Processing error: ${ error }`);
+    }
   }
 
-  public async create(customer: CustomerRequest){
-    const guid = crypto.randomUUID();
+  public async create(customer: CustomerRequest) {
+    try {
+      const data = {
+        guid: crypto.randomUUID(),
+        name: customer.name,
+        email: customer.email,
+        phone: customer.phone
+      };
+
+      const result = await CustomerModel.create(data);
+
+      return result;
+    } 
+    catch (error: any) {
+      throw new Error(`Processing error: ${ error }`);
+    }
   }
 
-  public async update(customer: CustomerRequest, guid: string){
-    
+  public async update(customer: CustomerRequest, guid: string) {
+    try {
+      const data = {
+        name: customer.name,
+        email: customer.email,
+        phone: customer.phone
+      };
+
+      const result = await CustomerModel.update(data, {
+        where: {
+          guid: guid
+        }
+      });
+
+      return result;       
+    } 
+    catch (error: any) {
+      throw new Error(`Processing error: ${ error }`);
+    }
   }
 
-  public async delete(guid: string){
-    
+  public async delete(guid: string) {
+    try {
+      const result = await CustomerModel.destroy({
+        where: {
+          guid: guid
+        }
+      });
+      return result;        
+    } 
+    catch (error: any) {
+      throw new Error(`Processing error: ${ error }`);
+    }
   }
 
 }

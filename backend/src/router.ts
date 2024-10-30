@@ -7,7 +7,7 @@ const router = Router();
 router.get("/api/customer", customerController.get);
 router.get("/api/customer/:guid", customerController.getByGuid);
 router.post("/api/customer", customerController.create);
-router.put("/api/customer", customerController.update);
-router.delete("/api/customer", customerController.delete);
+router.put("/api/customer/:guid", customerController.update);
+router.delete("/api/customer/:guid", customerController.delete);
 
 export default router;
