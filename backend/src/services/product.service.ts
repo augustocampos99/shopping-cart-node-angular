@@ -28,6 +28,20 @@ export default class ProductService {
     }
   }
 
+  public async getById(id: number) {    
+    try {
+      const result = await ProductModel.findOne({
+        where: {
+          id: id
+        }
+      });
+      return result;    
+    } 
+    catch (error: any) {
+      throw new Error(`Processing error: ${ error }`);
+    }
+  }
+
   public async create(product: ProductRequest) {
     try {
       const data = {

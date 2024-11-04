@@ -1,7 +1,9 @@
+import { validationResult } from "express-validator";
 import BaseResponse from "../contracts/base.response";
 import OrderRequest from "./../contracts/order.request";
 import OrderService from "./../services/order.service";
 import { Request, Response } from "express";
+import CustomerService from "../services/customer.service";
 
 class OrderController {
 
@@ -47,7 +49,21 @@ class OrderController {
 
   public async create(req: Request, res: Response){
     try {
-      const service = new OrderService();
+      const orderService = new OrderService();
+      const customerService = new CustomerService()
+
+      const validatorError = validationResult(req);
+      if (!validatorError.isEmpty()) {
+        return res.status(400).json({
+          message: "Errors",
+          errors: validatorError.array(),
+        });
+      }
+
+      const customer = await customerService.getById(req.body.customerId);
+      if(customer === null) {
+        return res.status(400).send("Customer not found");
+      }
 
       const data = {
         customerId: req.body.customerId,
@@ -59,7 +75,7 @@ class OrderController {
         return res.status(400).send("Required all fields!");
       }
   
-      const result = await service.create(data);
+      const result = await orderService.create(data);
   
       const response: BaseResponse = { message: "created", result: result }; 
 
@@ -73,11 +89,23 @@ class OrderController {
   }
 
   public async update(req: Request, res: Response){
-    const service = new OrderService();
-
     try {
-      const service = new OrderService();
+      const orderService = new OrderService();
+      const customerService = new CustomerService()
 
+      const validatorError = validationResult(req);
+      if (!validatorError.isEmpty()) {
+        return res.status(400).json({
+          message: "Errors",
+          errors: validatorError.array(),
+        });
+      }
+
+
+      const customer = await customerService.getById(req.body.customerId);
+      if(customer === null) {
+        return res.status(400).send("Customer not found");
+      }
       const data = {
         customerId: req.body.customerId,
         totalPrice: req.body.totalPrice,
@@ -88,7 +116,7 @@ class OrderController {
         return res.status(400).send("Required all fields!");
       }
   
-      const result = await service.update(data, req.params.guid);
+      const result = await orderService.update(data, req.params.guid);
 
       const response: BaseResponse = { message: "updated", result: result }; 
   

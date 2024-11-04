@@ -28,6 +28,20 @@ export default class OrderService {
     }
   }
 
+  public async getById(id: number) {    
+    try {
+      const result = await OrderModel.findOne({
+        where: {
+          id: id
+        }
+      });
+      return result;    
+    } 
+    catch (error: any) {
+      throw new Error(`Processing error: ${ error }`);
+    }
+  }
+
   public async create(order: OrderRequest) {
     try {
       const data = {

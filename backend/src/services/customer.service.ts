@@ -28,6 +28,20 @@ export default class CustomerService {
     }
   }
 
+  public async getById(id: number) {    
+    try {
+      const result = await CustomerModel.findOne({
+        where: {
+          id: id
+        }
+      });
+      return result;    
+    } 
+    catch (error: any) {
+      throw new Error(`Processing error: ${ error }`);
+    }
+  }
+
   public async create(customer: CustomerRequest) {
     try {
       const data = {

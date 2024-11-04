@@ -1,3 +1,4 @@
+import { validationResult } from "express-validator";
 import BaseResponse from "../contracts/base.response";
 import CustomerRequest from "./../contracts/customer.request";
 import CustomerService from "./../services/customer.service";
@@ -49,6 +50,14 @@ class CustomerController {
     try {
       const service = new CustomerService();
 
+      const validatorError = validationResult(req);
+      if (!validatorError.isEmpty()) {
+        return res.status(400).json({
+          message: "Errors",
+          errors: validatorError.array(),
+        });
+      }
+
       const data = {
         name: req.body.name,
         email: req.body.email,
@@ -77,6 +86,14 @@ class CustomerController {
 
     try {
       const service = new CustomerService();
+
+      const validatorError = validationResult(req);
+      if (!validatorError.isEmpty()) {
+        return res.status(400).json({
+          message: "Errors",
+          errors: validatorError.array(),
+        });
+      }
 
       const data = {
         name: req.body.name,

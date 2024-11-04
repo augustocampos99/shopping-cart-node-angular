@@ -1,7 +1,10 @@
+import { validationResult } from "express-validator";
 import BaseResponse from "../contracts/base.response";
 import OrderProductRequest from "./../contracts/order_product.request";
 import OrderProductService from "./../services/order_product.service";
 import { Request, Response } from "express";
+import ProductService from "../services/product.service";
+import OrderService from "../services/order.service";
 
 class OrderProductController {
 
@@ -48,6 +51,25 @@ class OrderProductController {
   public async create(req: Request, res: Response){
     try {
       const service = new OrderProductService();
+      const orderService = new OrderService();
+      const productService = new ProductService();
+
+      const validatorError = validationResult(req);
+      if (!validatorError.isEmpty()) {
+        return res.status(400).json({
+          message: "Errors",
+          errors: validatorError.array(),
+        });
+      }
+
+      const order = await orderService.getById(req.body.orderId);
+      const product = await productService.getById(req.body.productId);
+      if(order === null) {
+        return res.status(400).send("Order not found");
+      }
+      if(product === null) {
+        return res.status(400).send("Product not found");
+      }
 
       const data = {
         orderId: req.body.orderId,
@@ -78,6 +100,14 @@ class OrderProductController {
 
     try {
       const service = new OrderProductService();
+
+      const validatorError = validationResult(req);
+      if (!validatorError.isEmpty()) {
+        return res.status(400).json({
+          message: "Errors",
+          errors: validatorError.array(),
+        });
+      }
 
       const data = {
         orderId: req.body.orderId,

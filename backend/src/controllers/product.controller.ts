@@ -1,3 +1,4 @@
+import { validationResult } from "express-validator";
 import BaseResponse from "../contracts/base.response";
 import ProductRequest from "./../contracts/product.request";
 import ProductService from "./../services/product.service";
@@ -49,6 +50,14 @@ class ProductController {
     try {
       const service = new ProductService();
 
+      const validatorError = validationResult(req);
+      if (!validatorError.isEmpty()) {
+        return res.status(400).json({
+          message: "Errors",
+          errors: validatorError.array(),
+        });
+      }
+
       const data = {
         title: req.body.title,
         description: req.body.description,
@@ -77,6 +86,14 @@ class ProductController {
 
     try {
       const service = new ProductService();
+
+      const validatorError = validationResult(req);
+      if (!validatorError.isEmpty()) {
+        return res.status(400).json({
+          message: "Errors",
+          errors: validatorError.array(),
+        });
+      }
 
       const data = {
         title: req.body.title,
