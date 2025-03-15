@@ -4,13 +4,15 @@ import ProductRequest from "./../contracts/product.request";
 import ProductService from "./../services/product.service";
 import { Request, Response } from "express";
 
-class ProductController {
+export default class ProductController {
+
+  constructor(private readonly service: ProductService) {}
 
   public async get(req: Request, res: Response){
     try {
       const service = new ProductService();
 
-      const result = await service.getAll();
+      const result = await this.service.getAll();
 
       if(result === null) {
         return res.status(404).send();
@@ -28,9 +30,7 @@ class ProductController {
 
   public async getByGuid(req: Request, res: Response){
     try {
-      const service = new ProductService();
-
-      const result = await service.getByGuid(req.params.guid);
+      const result = await this.service.getByGuid(req.params.guid);
 
       if(result === null) {
         return res.status(404).send();
@@ -48,8 +48,6 @@ class ProductController {
 
   public async create(req: Request, res: Response){
     try {
-      const service = new ProductService();
-
       const validatorError = validationResult(req);
       if (!validatorError.isEmpty()) {
         return res.status(400).json({
@@ -68,7 +66,7 @@ class ProductController {
         return res.status(400).send("Required all fields!");
       }
   
-      const result = await service.create(data);
+      const result = await this.service.create(data);
   
       const response: BaseResponse = { message: "created", result: result }; 
 
@@ -82,11 +80,7 @@ class ProductController {
   }
 
   public async update(req: Request, res: Response){
-    const service = new ProductService();
-
     try {
-      const service = new ProductService();
-
       const validatorError = validationResult(req);
       if (!validatorError.isEmpty()) {
         return res.status(400).json({
@@ -105,7 +99,7 @@ class ProductController {
         return res.status(400).send("Required all fields!");
       }
   
-      const result = await service.update(data, req.params.guid);
+      const result = await this.service.update(data, req.params.guid);
 
       const response: BaseResponse = { message: "updated", result: result }; 
   
@@ -119,9 +113,7 @@ class ProductController {
 
   public async delete(req: Request, res: Response){
     try {
-      const service = new ProductService();
-
-      const result = await service.delete(req.params.guid);
+      const result = await this.service.delete(req.params.guid);
 
       if(result === null) {
         return res.status(404).send();
@@ -138,5 +130,3 @@ class ProductController {
   }
 
 }
-
-export default new ProductController();
